@@ -95,12 +95,14 @@ fn interp(expr: ExprC, env: Env) -> Value {
 
 	match expr {
 		
-		ExprC::numC{val: v} => Value::numV{n: v}
+		ExprC::numC{val: v} => Value::numV{n: v},
+		ExprC::idC{id: c} => lookup(c, env),
+		ExprC::trueC{val: v} => Value::boolV{b: v},
+		ExprC::falseC{val: v} => Value::boolV{b: v},
+		ExprC::ifC{test: t, then: h, last: l} => interp_if(unsafe{*Box::into_raw(t)}, unsafe{*Box::into_raw(h)}, unsafe{*Box::into_raw(l)}, env)
+        }
 
-	/*ExprCidC::expr.char
-        },
-
-	trueC {	
+	/*trueC {	
                 val: bool
         },
 
@@ -117,9 +119,40 @@ fn interp(expr: ExprC, env: Env) -> Value {
              	test: Box<ExprC>,
                 then: Box<ExprC>,
                 last: Box<ExprC>
-        },*/
+        },
 
 
-	}
+	}*/
 
 }
+
+fn interp_if (test: ExprC, then: ExprC, last: ExprC, env: Env) -> Value {
+
+	let x = interp(test, env);
+
+	match x {
+
+		Value::boolV{b: v} => if v == true {
+					 interp(then, env)	
+				      }
+				      else {
+					 interp(last, env)
+				      },
+		_ => panic!("UIRE: 'interp_if test case did not evaluate into a boolean")
+	}
+}
+
+fn lookup (sym: char, env: Env) -> Value {
+
+	let length = env.bindings.len();
+
+	for x in 0..length {
+		let binding = env.bindings[x];
+		if sym == binding.name {
+			binding.val;
+		}
+	}
+
+	panic!("UIRE: 'lookup Symbol is not in the environment");
+}
+
