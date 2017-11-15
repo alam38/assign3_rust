@@ -100,32 +100,18 @@ fn interp(expr: ExprC, env: Env) -> Value {
 		ExprC::trueC{val: v} => Value::boolV{b: v},
 		ExprC::falseC{val: v} => Value::boolV{b: v},
 		ExprC::ifC{test: t, then: h, last: l} => interp_if(unsafe{*Box::into_raw(t)}, unsafe{*Box::into_raw(h)}, unsafe{*Box::into_raw(l)}, env)
-        }
+      /*
 
-	/*trueC {	
-                val: bool
-        },
-
-	falseC {
-                val: bool
-        },
-
-	lamC {
-              	params: Vec<char>,
-                body: Box<ExprC>
-        },
-
-	ifC {
-             	test: Box<ExprC>,
-                then: Box<ExprC>,
-                last: Box<ExprC>
-        },
-
-
-	}*/
+		ExprC::lamC
+		ExprC::appC
+		*/
+		  
+		  	}
 
 }
 
+//helper function to interpret if UIRE3 statements. Evaluates the test expression. If it evaluates to
+// true, evaluate then expression else evaluate last expression.
 fn interp_if (test: ExprC, then: ExprC, last: ExprC, env: Env) -> Value {
 
 	let x = interp(test, env);
@@ -142,6 +128,7 @@ fn interp_if (test: ExprC, then: ExprC, last: ExprC, env: Env) -> Value {
 	}
 }
 
+//helper function to lookup the value corresponding to the symbol within the environment.
 fn lookup (sym: char, env: Env) -> Value {
 
 	let length = env.bindings.len();
