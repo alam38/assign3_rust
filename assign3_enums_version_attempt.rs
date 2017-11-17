@@ -99,16 +99,27 @@ fn interp(expr: ExprC, env: Env) -> Value {
 		ExprC::idC{id: c} => lookup(c, env),
 		ExprC::trueC{val: v} => Value::boolV{b: v},
 		ExprC::falseC{val: v} => Value::boolV{b: v},
-		ExprC::ifC{test: t, then: h, last: l} => interp_if(unsafe{*Box::into_raw(t)}, unsafe{*Box::into_raw(h)}, unsafe{*Box::into_raw(l)}, env)
+		ExprC::ifC{test: t, then: h, last: l} => interp_if(unsafe{*Box::into_raw(t)}, 
+			unsafe{*Box::into_raw(h)}, unsafe{*Box::into_raw(l)}, env),
+		/*ExprC::binopC{op: o, left: l, right: r} => interp_binop(o, env, 
+			unsafe{*Box::into_raw(l)}, unsafe{*Box::into_raw(r)}), */
+
+		ExprC::lamC{params: p , body: b} => Value::closV{args: p , body: b , env: env}
       /*
 
-		ExprC::lamC
 		ExprC::appC
 		*/
 		  
 		  	}
 
 }
+
+//Helper function to interpret binary operations. 
+/*fn interp_binop(op: char, env: Env, left: ExprC, right: ExprC) -> Value { 
+
+	
+
+}*/	
 
 //helper function to interpret if UIRE3 statements. Evaluates the test expression. If it evaluates to
 // true, evaluate then expression else evaluate last expression.
