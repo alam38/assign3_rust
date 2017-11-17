@@ -16,7 +16,7 @@ enum ExprC {
 	},	
 
 	idC { 
-		id: char
+		id: String
 	},	
 
 	trueC { 
@@ -28,7 +28,7 @@ enum ExprC {
 	},	
 
 	lamC { 
-		params: Vec<char>,
+		params: Vec<String>,
 		body: Box<ExprC>
 	},	
 
@@ -40,7 +40,7 @@ enum ExprC {
 
 	binopC { 
 		
-		op: char,
+		op: String,
 		left : Box<ExprC>,
 		right : Box<ExprC>
 	},	
@@ -54,7 +54,7 @@ enum ExprC {
 }	
 
 struct Binding { 
-	name: char,
+	name: String,
 	val: Value
 }
 
@@ -78,7 +78,7 @@ enum Value {
 
 	closV { 
 
-		args: Vec<char>,
+		args: Vec<String>,
 		body: Box<ExprC>,
 		env: Env
 	}
@@ -115,7 +115,7 @@ fn interp(expr: ExprC, env: Env) -> Value {
 }
 
 //Helper function to interpret binary operations. 
-/*fn interp_binop(op: char, env: Env, left: ExprC, right: ExprC) -> Value { 
+/*fn interp_binop(op: String, env: Env, left: ExprC, right: ExprC) -> Value { 
 
 	
 
@@ -140,7 +140,7 @@ fn interp_if (test: ExprC, then: ExprC, last: ExprC, env: Env) -> Value {
 }
 
 //helper function to lookup the value corresponding to the symbol within the environment.
-fn lookup (sym: char, env: Env) -> Value {
+fn lookup (sym: String, env: Env) -> Value {
 
 	let length = env.bindings.len();
 
